@@ -1,49 +1,46 @@
-def somar(x, y):
-    return x + y
+import tkinter as tk
 
-def subtrair(x, y):
-    return x - y
+# Função para avaliar a expressão
+def clicar(botao):
+    atual = entrada.get()
+    if botao == "=":
+        try:
+            resultado = eval(atual)
+            entrada.delete(0, tk.END)
+            entrada.insert(tk.END, str(resultado))
+        except:
+            entrada.delete(0, tk.END)
+            entrada.insert(tk.END, "Erro")
+    elif botao == "C":
+        entrada.delete(0, tk.END)
+    else:
+        entrada.insert(tk.END, botao)
 
-def multiplicar(x, y):
-    return x * y
+# Criando a janela principal
+janela = tk.Tk()
+janela.title("Calculadora Jeofton")
+janela.geometry("300x400")
+janela.resizable(False, False)
 
-def dividir(x, y):
-    if y == 0:
-        return "Erro: divisão por zero!"
-    return x / y
+# Campo de entrada
+entrada = tk.Entry(janela, font=("Arial", 20), borderwidth=2, relief="ridge", justify="right")
+entrada.pack(padx=10, pady=10, fill="both")
 
-def menu():
-    print("=== Calculadora Básica ===")
-    print("1 - Somar")
-    print("2 - Subtrair")
-    print("3 - Multiplicar")
-    print("4 - Dividir")
-    print("5 - Sair")
+# Layout dos botões
+botoes = [
+    ['7', '8', '9', '/'],
+    ['4', '5', '6', '*'],
+    ['1', '2', '3', '-'],
+    ['0', 'C', '=', '+']
+]
 
-while True:
-    menu()
-    escolha = input("Escolha uma operação (1-5): ")
+# Criar os botões na interface
+for linha in botoes:
+    frame = tk.Frame(janela)
+    frame.pack(expand=True, fill="both")
+    for item in linha:
+        botao = tk.Button(frame, text=item, font=("Arial", 18), command=lambda x=item: clicar(x))
+        botao.pack(side="left", expand=True, fill="both")
 
-    if escolha == '5':
-        print("Encerrando a calculadora. Até logo!")
-        break
-
-    if escolha not in ['1', '2', '3', '4']:
-        print("Opção inválida. Tente novamente.")
-        continue
-
-    try:
-        num1 = float(input("Digite o primeiro número: "))
-        num2 = float(input("Digite o segundo número: "))
-    except ValueError:
-        print("Entrada inválida. Digite apenas números.")
-        continue
-
-    if escolha == '1':
-        print("Resultado:", somar(num1, num2))
-    elif escolha == '2':
-        print("Resultado:", subtrair(num1, num2))
-    elif escolha == '3':
-        print("Resultado:", multiplicar(num1, num2))
-    elif escolha == '4':
-        print("Resultado:", dividir(num1, num2))
+# Inicia a interface
+janela.mainloop()
