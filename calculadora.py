@@ -18,11 +18,15 @@ def menu():
     print("2 - Subtrair")
     print("3 - Multiplicar")
     print("4 - Dividir")
+    print("5 - Sair")
 
 while True:
     menu()
-    escolha = input("Escolha uma operação (1-4): ")
+    escolha = input("Escolha uma operação (1-5): ")
 
+    if escolha == '5':
+        print("Encerrando a calculadora. Até logo!")
+        break
 
     if escolha not in ['1', '2', '3', '4']:
         print("Opção inválida. Tente novamente.")
