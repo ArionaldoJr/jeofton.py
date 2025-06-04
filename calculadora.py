@@ -1,59 +1,65 @@
 import tkinter as tk
+from tkinter import ttk
 
+# Função para atualizar o visor
 def clicar(botao):
     atual = entrada.get()
-    if botao == "=":
+    if botao == "C":
+        entrada.delete(0, tk.END)
+    elif botao == "=":
         try:
             resultado = eval(atual)
             entrada.delete(0, tk.END)
             entrada.insert(tk.END, str(resultado))
-        except:
+        except Exception:
             entrada.delete(0, tk.END)
             entrada.insert(tk.END, "Erro")
-    elif botao == "C":
-        entrada.delete(0, tk.END)
     else:
         entrada.insert(tk.END, botao)
-
-def tecla(evento):
-    tecla_pressionada = evento.char
-    if tecla_pressionada in "0123456789+-*/.":
-        entrada.insert(tk.END, tecla_pressionada)
-    elif tecla_pressionada == '\r':  # Enter
-        clicar("=")
-    elif evento.keysym == 'BackSpace':
-        entrada.delete(len(entrada.get())-1, tk.END)
-    elif evento.keysym == 'Escape':
-        clicar("C")
 
 # Janela principal
 janela = tk.Tk()
 janela.title("Calculadora Jeofton")
 janela.geometry("300x400")
-janela.resizable(False, False)
+janela.configure(bg="#1e1e1e")
 
-# Entrada
-entrada = tk.Entry(janela, font=("Arial", 20), borderwidth=2, relief="ridge", justify="right")
-entrada.pack(padx=10, pady=10, fill="both")
-entrada.focus_set()  # Foco no campo de entrada
+# Estilo
+style = ttk.Style()
+style.configure("TButton", font=("Arial", 14), padding=10)
 
-# Vincula o teclado à função tecla()
-janela.bind("<Key>", tecla)
+# Visor da calculadora
+entrada = tk.Entry(janela, font=("Arial", 24), bd=10, relief=tk.FLAT, justify="right", bg="#252525", fg="white")
+entrada.pack(pady=20, padx=10, fill="x")
 
-# Botões
+# Botões da calculadora
 botoes = [
-    ['7', '8', '9', '/'],
-    ['4', '5', '6', '*'],
-    ['1', '2', '3', '-'],
-    ['0', 'C', '=', '+']
+    ["7", "8", "9", "/"],
+    ["4", "5", "6", "*"],
+    ["1", "2", "3", "-"],
+    ["0", ".", "=", "+"],
+    ["C"]
 ]
 
-for linha in botoes:
-    frame = tk.Frame(janela)
-    frame.pack(expand=True, fill="both")
-    for item in linha:
-        botao = tk.Button(frame, text=item, font=("Arial", 18), command=lambda x=item: clicar(x))
-        botao.pack(side="left", expand=True, fill="both")
+frame_botoes = tk.Frame(janela, bg="#1e1e1e")
+frame_botoes.pack()
 
-# Loop principal
+for linha in botoes:
+    linha_frame = tk.Frame(frame_botoes, bg="#1e1e1e")
+    linha_frame.pack(side="top", fill="x")
+    for texto in linha:
+        cor_botao = "#3a3a3a" if texto not in ["=", "C"] else "#007acc" if texto == "=" else "#cc0000"
+        botao = tk.Button(
+            linha_frame,
+            text=texto,
+            width=5,
+            height=2,
+            font=("Arial", 16),
+            fg="white",
+            bg=cor_botao,
+            relief=tk.FLAT,
+            command=lambda t=texto: clicar(t)
+        )
+        botao.pack(side="left", expand=True, fill="both", padx=3, pady=3)
+
+# Iniciar a janela
 janela.mainloop()
